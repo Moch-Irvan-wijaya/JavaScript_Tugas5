@@ -6,4 +6,5 @@ Sebuah toko online ingin mengembangkan fitur manajemen produk berbasis JavaScrip
 <br>Menambahkan Produk
 <br>Menghapus Produk
 <br>Menampilkan Semua Produk
-<br>Aplikasi ini akan menggunakan Event Listener, Destructuring, Spread Operator, dan Rest Parameter untuk meningkatkan efisiensi dan fleksibilitas kode.
+
+Aplikasi ini akan menggunakan Event Listener, Destructuring, Spread Operator, dan Rest Parameter untuk meningkatkan efisiensi dan fleksibilitas kode.
