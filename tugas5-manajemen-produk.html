@@ -1,0 +1,165 @@
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tugas 5 - Manajemen Produk</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2 align="center">MANAJEMEN PRODUK TOKO ONLINE</h2>
+  <hr/>
+  <!-- form tambah produk -->
+  <div>
+    <h3>Tambah Produk</h3>
+    ID: <input type="number" id="inputId" placeholder="contoh: 7">
+    Nama: <input type="text" id="inputNama" placeholder="contoh: Monitor">
+    Harga: <input type="number" id="inputHarga" placeholder="contoh: 1500000">
+    <button id="btnTambah">Tambah</button>
+  </div>
+
+  <!-- form hapus produk -->
+  <h3>Hapus Produk</h3>
+  ID yang dihapus: <input type="text" id="inputHapus" placeholder="contoh: 2 atau 2,4">
+  <button id="btnHapus">Hapus</button>
+
+  <br/><br/>
+  <button id="btnTampil">Tampilkan Semua Produk</button>
+
+  <!-- tempat pesan & tabel produk -->
+  <p id="pesan"></p>
+  <div id="hasil"></div>
+
+  <script>
+    // Data Produk
+    // data awal produk
+    let produkList = [
+      { id: 1, nama: "Laptop", harga: 12000000 },
+      { id: 2, nama: "Smartphone", harga: 5000000 },
+      { id: 3, nama: "Headphone", harga: 750000 },
+      { id: 4, nama: "Keyboard", harga: 350000 },
+      { id: 5, nama: "Mouse", harga: 200000 }
+    ];
+
+    // fungsi kecil buat nampilin pesan di halaman
+    function tampilPesan(teks) {
+      document.getElementById("pesan").innerText = teks;
+    }
+
+    // Menambahkan Produk (pakai Spread Operator)
+    function tambahProduk(id, nama, harga) {
+      // cek dulu id-nya sudah dipakai atau belum
+      for (const produk of produkList) {
+        if (produk.id === id) {
+          tampilPesan("Gagal: ID " + id + " sudah dipakai");
+          return;
+        }
+      }
+
+      // spread (...produkList) = salin semua isi array lama,
+      // lalu produk baru ditaruh di paling belakang
+      produkList = [...produkList, { id: id, nama: nama, harga: harga }];
+      tampilPesan("Produk " + nama + " berhasil ditambahkan");
+    }
+
+    // Menghapus Produk (pakai Rest Parameter)
+    // ...daftarId = semua argumen dikumpulin jadi satu array
+    // jadi bisa hapus 1 produk: hapusProduk(2)
+    // atau banyak sekaligus: hapusProduk(2, 4)
+    function hapusProduk(...daftarId) {
+      const jumlahAwal = produkList.length;
+
+      // filter = ambil produk yang id-nya TIDAK ada di daftarId
+      produkList = produkList.filter(produk => !daftarId.includes(produk.id));
+
+      const jumlahTerhapus = jumlahAwal - produkList.length;
+      if (jumlahTerhapus == 0) {
+        tampilPesan("Produk dengan ID tersebut tidak ditemukan");
+      } else {
+        tampilPesan(jumlahTerhapus + " produk berhasil dihapus");
+      }
+    }
+
+    // Menampilkan Produk (pakai Destructuring)
+    function tampilkanProduk() {
+      let baris = "";
+
+      // { id, nama, harga } = langsung ambil isi object ke 3 variabel
+      for (const { id, nama, harga } of produkList) {
+        baris += "<tr>" +
+        "<td>" + id + "</td>" +
+        "<td>" + nama + "</td>" +
+        "<td>Rp. " + harga + "</td>" +
+        "</tr>";
+        console.log("ID: " + id + " | " + nama + " | Rp. " + harga);
+      }
+      console.log("----------------------------");
+
+      // kalau datanya kosong, tampilkan satu baris keterangan
+      if (produkList.length == 0) {
+        baris = "<tr><td colspan='3' align='center'>Belum ada produk</td></tr>";
+      }
+
+      document.getElementById("hasil").innerHTML =
+        "<table border='1' cellpadding='8' cellspacing='0' width='100%'>" +
+          "<thead><tr><th>ID</th><th>Nama Produk</th><th>Harga</th></tr></thead>" +
+          "<tbody>" + baris + "</tbody>" +
+        "</table>";
+    }
+
+    // Event Handler
+    // object yang isinya fungsi-fungsi buat tombol
+    const eventHandler = {
+      // dijalankan waktu tombol Tambah diklik
+      tombolTambah: function () {
+        const id = Number(document.getElementById("inputId").value);
+        const nama = document.getElementById("inputNama").value;
+        const harga = Number(document.getElementById("inputHarga").value);
+
+        // cek inputan tidak kosong
+        if (id == 0 || nama == "" || harga == 0) {
+          tampilPesan("Isi ID, nama, dan harga dengan benar dulu");
+          return;
+        }
+
+        tambahProduk(id, nama, harga);
+        tampilkanProduk();
+      },
+
+      // dijalankan waktu tombol Hapus diklik
+      tombolHapus: function () {
+        const teks = document.getElementById("inputHapus").value;
+
+        // "2,4" dipecah jadi ["2","4"] lalu diubah jadi angka [2, 4]
+        const daftarId = teks.split(",").map(item => Number(item));
+
+        // spread (...daftarId) = array dipecah jadi argumen satu-satu
+        hapusProduk(...daftarId);
+        tampilkanProduk();
+      },
+
+      // dijalankan waktu tombol Tampilkan diklik
+      tombolTampil: function () {
+        tampilkanProduk();
+      }
+    };
+
+    // Event Listener
+    // pasang event klik ke masing-masing tombol
+    document.getElementById("btnTambah").addEventListener("click", eventHandler.tombolTambah);
+    document.getElementById("btnHapus").addEventListener("click", eventHandler.tombolHapus);
+    document.getElementById("btnTampil").addEventListener("click", eventHandler.tombolTampil);
+
+    // Contoh pemanggilan (hasilnya bisa dilihat di Console)
+    tampilkanProduk();
+    // contoh penambahan data
+    tambahProduk(6, "Tablet", 7000000);
+    tampilkanProduk();
+    // contoh penghapusan data
+    hapusProduk(2);
+    tampilkanProduk();
+  </script>
+</body>
+</html>

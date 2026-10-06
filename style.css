@@ -1,0 +1,37 @@
+/* font dan warna dasar halaman, isi dibuat di tengah */
+body {
+font-family: Arial, sans-serif;
+background-color: #f4f6f8;
+max-width: 800px;
+margin: 20px auto;
+padding: 0 15px;
+}
+
+h2 { color: #1a5fb4; }
+
+/* kotak input */
+input {
+padding: 6px;
+margin: 4px;
+border: 1px solid #999;
+border-radius: 4px;
+}
+
+/* tombol */
+button {
+padding: 7px 14px;
+background-color: #1a5fb4;
+color: white;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+}
+button:hover { background-color: #14488a; } /* warna berubah saat kursor di atas tombol */
+
+/* tabel */
+table { border-collapse: collapse; background-color: white; }
+th { background-color: #1a5fb4; color: white; }
+th, td { padding: 8px; text-align: left; }
+
+/* teks pesan (berhasil/gagal) */
+#pesan { font-weight: bold; color: #1a5fb4; }                       
